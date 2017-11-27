@@ -1,0 +1,38 @@
+<html>
+<head>
+</head>
+<body>
+<input type="text" name="comment" id="comment">
+<input type="button" value="ADD TWEET" id="tweet">
+<p id="feedback"></p>
+<br>
+<h3>All Tweets :</h3>
+<div style="width:50%;height:400px;overflow:auto;">
+  <ul>
+     {% for item in data %}
+        <li>Comment by {{item['AID']}} on {{item['timestamp']}} <br> {{item['comment']}} </li>
+     {% endfor %}
+  </ul>
+</div>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.js') }}"></script>
+<script type="text/javascript">
+   $(document).ready(function(){
+   	  $('#tweet').click(function(){
+   	  	var comment=$('#comment').val().trim();
+   	  	if (comment.length!=0)
+   	  		{ 
+   	  			$.ajax({
+                type: "GET",
+                url:"{{ url_for('update_comment') }}",
+                contentType: "application/json; charset=utf-8",
+                data: { comment:comment },
+                success: function(data) {
+                 $('#feedback').html(data.response);
+            }
+        });   
+   	  		}
+   	  });
+   });
+</script>
+</body>
+</html>
